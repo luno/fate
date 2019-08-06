@@ -1,6 +1,7 @@
 package fate
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -12,9 +13,6 @@ import (
 	"time"
 
 	"github.com/go-stack/stack"
-
-	"bitx/lib/jettison/errors"
-	"bitx/lib/jettison/j"
 )
 
 var (
@@ -35,7 +33,7 @@ var (
 		"fully/qualified/package:0.1,other/package:0")
 
 	// ErrTempt is the error returned when tempting fate and losing.
-	ErrTempt = errors.New("tempt fate error", j.C("ERR_71f9663837646877"))
+	ErrTempt = errors.New("tempt fate error")
 
 	packagePMap        map[string]float64
 	loadPackageOncePer sync.Once

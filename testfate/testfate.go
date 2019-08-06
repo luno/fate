@@ -4,9 +4,8 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/luno/fate"
 	"github.com/stretchr/testify/assert"
-
-	"bitx/lib/fate"
 )
 
 // Compile-time check that TestFate implements fate.Fate

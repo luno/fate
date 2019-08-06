@@ -1,6 +1,8 @@
 package fate
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"github.com/prometheus/client_golang/prometheus"
+)
 
 var temptCount = prometheus.NewCounter(prometheus.CounterOpts{
 	Namespace: "fate",
