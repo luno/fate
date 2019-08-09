@@ -2,10 +2,11 @@
 // errors inside application logic by "tempting fate".
 //
 //   type Fate interface {
+//      // Tempt sometimes returns ErrTempt.
 //      Tempt() error
 //   }
 //
-// Fate support deterministic behavior for tests and probabilistic behavior
+// Fate supports deterministic behavior for tests and probabilistic behavior
 // for production.
 //
 // The canonical usage pattern:

@@ -4,26 +4,60 @@ import (
 	"testing"
 
 	"github.com/luno/fate"
-	"github.com/stretchr/testify/require"
 )
 
 func TestPackageProbability1(t *testing.T) {
-	defer fate.DisableOfficeHoursForTesting(t)()
-	defer fate.SetPackagePForTesting(t, "github.com/luno/fate_test:1")()
+	defer fate.SetConfig(
+		fate.WithoutOfficeHours(),
+		fate.WithPackageP(map[string]float64{"github.com/luno/fate_test": 1}),
+	)()
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
 		err := fate.New().Tempt()
-		require.Error(t, err)
-		require.Equal(t, err, fate.ErrTempt)
+		if err != fate.ErrTempt {
+			t.Fatalf("expected fate.ErrTempt: %v", err)
+		}
 	}
 }
 
 func TestPackageProbability0(t *testing.T) {
-	defer fate.DisableOfficeHoursForTesting(t)()
-	defer fate.SetPackagePForTesting(t, "github.com/luno/fate_test:0")()
+	defer fate.SetConfig(
+		fate.WithoutOfficeHours(),
+		fate.WithPackageP(map[string]float64{"github.com/luno/fate_test": 0}),
+	)()
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
 		err := fate.New().Tempt()
-		require.NoError(t, err)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	}
+}
+
+func TestDefaultProbability1(t *testing.T) {
+	defer fate.SetConfig(
+		fate.WithoutOfficeHours(),
+		fate.WithDefaultP(1),
+	)()
+
+	for i := 0; i < 100; i++ {
+		err := fate.New().Tempt()
+		if err != fate.ErrTempt {
+			t.Fatalf("expected fate.ErrTempt: %v", err)
+		}
+	}
+}
+
+func TestDefaultProbability0(t *testing.T) {
+	defer fate.SetConfig(
+		fate.WithoutOfficeHours(),
+		fate.WithDefaultP(0),
+	)()
+
+	for i := 0; i < 100; i++ {
+		err := fate.New().Tempt()
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
 	}
 }
