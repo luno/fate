@@ -1,7 +1,5 @@
 module github.com/luno/fate
 
-go 1.12
-
 require (
 	github.com/go-stack/stack v1.8.0
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
