@@ -11,7 +11,7 @@
 //
 // The canonical usage pattern:
 //
-//   function multiStepLogic(state state.State, fate fate.Fate, arg int) error {
+//   func multiStepLogic(state state.State, fate fate.Fate, arg int) error {
 //     r1, err := step1(state.Step1DB(), arg)
 //     if err != nil {
 //       return err
