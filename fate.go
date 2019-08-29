@@ -1,17 +1,18 @@
 package fate
 
 import (
-	"errors"
 	"fmt"
 	"math/rand"
 	"time"
 
 	"github.com/go-stack/stack"
+	"github.com/luno/jettison/errors"
+	"github.com/luno/jettison/j"
 )
 
 var (
 	// ErrTempt is the error returned when tempting fate and losing.
-	ErrTempt = errors.New("tempt fate error")
+	ErrTempt = errors.New("tempt fate error", j.C("ERR_9f3adc780288ce11"))
 )
 
 // Fate is an interface that wraps the tempt method.
@@ -23,27 +24,34 @@ type Fate interface {
 }
 
 // Tempt sometimes returns ErrTempt.
+// Note this uses the global config, configuring and using Fate instances is advised.
 func Tempt() error {
 	return New().Tempt()
 }
 
-// New returns a new fate instance.
-func New() Fate {
-	return &fate{}
+// New returns a new fate instance configured with the options provided.
+func New(opts ...option) Fate {
+	c := cloneConfig(globalConf)
+	for _, opt := range opts {
+		opt(c)
+	}
+	return &fate{conf: c}
 }
 
-type fate struct{}
+type fate struct {
+	conf *config
+}
 
 // Tempt sometimes returns ErrTempt.
 func (f *fate) Tempt() error {
-	if maybeInOfficeHours(time.Now()) {
+	if maybeInOfficeHours(f.conf, time.Now()) {
 		return nil
 	}
 
 	temptCount.Inc()
 
-	p := conf.DefaultP
-	if f, ok := getPackageP(); ok {
+	p := f.conf.DefaultP
+	if f, ok := getPackageP(f.conf); ok {
 		p = f
 	}
 
@@ -57,7 +65,7 @@ func (f *fate) Tempt() error {
 
 // maybeInOfficeHours returns true if office hours is configured and
 // t falls inside it.
-func maybeInOfficeHours(t time.Time) bool {
+func maybeInOfficeHours(conf *config, t time.Time) bool {
 	if !conf.OfficeHours.Enabled {
 		return false
 	}
@@ -75,7 +83,7 @@ func maybeInOfficeHours(t time.Time) bool {
 
 // getPackageP returns the error probability and true if it is explicitly
 // configured for the calling package.
-func getPackageP() (float64, bool) {
+func getPackageP(conf *config) (float64, bool) {
 	if len(conf.PackageP) == 0 {
 		return 0, false
 	}

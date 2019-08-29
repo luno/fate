@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	conf = defaultConfig()
+	globalConf = defaultConfig()
 )
 
 type config struct {
@@ -26,18 +26,29 @@ type officeHours struct {
 	HourEnd   int
 }
 
-// SetConfig sets the config defined by the functional options and returns an
-// undo function mostly used for testing.
+// SetConfig sets the global config defined by the functional options.
+// It returns an undo function mostly used for testing.
+// Note configuring and using Fate instances is advised over global config.
 func SetConfig(opts ...option) func() {
-	undo := *conf
-
+	conf := defaultConfig()
 	for _, opt := range opts {
 		opt(conf)
 	}
 
+	undo := globalConf
+	globalConf = conf
 	return func() {
-		conf = &undo
+		globalConf = undo
 	}
+}
+
+func cloneConfig(conf *config) *config {
+	c := *conf
+	c.PackageP = make(map[string]float64)
+	for key, value := range conf.PackageP {
+		c.PackageP[key] = value
+	}
+	return &c
 }
 
 // defaultConfig defines the default config.
