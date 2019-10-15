@@ -31,7 +31,7 @@ func TestFate(t *testing.T) {
 
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
-			fate := New(test.opt)
+			fate := New(test.opt, WithoutOfficeHours())
 			for i := 0; i < 100; i++ {
 				err := fate.Tempt()
 				if test.err {
