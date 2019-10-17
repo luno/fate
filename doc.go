@@ -17,7 +17,7 @@
 //       return err
 //     }
 //
-//     if err := fate.Temp(); err != nil {
+//     if err := fate.Tempt(); err != nil {
 //       return err
 //     }
 //
@@ -26,7 +26,7 @@
 //       return err
 //     }
 //
-//     return fate.Temp()
+//     return fate.Tempt()
 //   }
 //
 // Increasing the tangibility and probability of errors by regularly tempting
