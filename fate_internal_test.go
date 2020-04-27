@@ -7,41 +7,34 @@ import (
 func TestFate(t *testing.T) {
 	cases := []struct {
 		name string
-		opt  option
-		err  bool
+		fate Fate
+		err  error
 	}{
 		{
 			name: "package probability 1",
-			opt:  WithPackageP(map[string]float64{"github.com/luno/fate": 1}),
-			err:  true,
+			fate: New(WithPackageP(map[string]float64{"github.com/luno/fate": 1}), WithoutOfficeHours()),
+			err:  ErrTempt,
 		}, {
 			name: "package probability 0",
-			opt:  WithPackageP(map[string]float64{"github.com/luno/fate": 0}),
-			err:  false,
+			fate: New(WithPackageP(map[string]float64{"github.com/luno/fate": 0}), WithoutOfficeHours()),
+			err:  nil,
 		}, {
 			name: "default probability 1",
-			opt:  WithDefaultP(1),
-			err:  true,
+			fate: New(WithDefaultP(1), WithoutOfficeHours()),
+			err:  ErrTempt,
 		}, {
 			name: "default probability 0",
-			opt:  WithDefaultP(0),
-			err:  false,
+			fate: New(WithDefaultP(0), WithoutOfficeHours()),
+			err:  nil,
 		},
 	}
 
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
-			fate := New(test.opt)
 			for i := 0; i < 100; i++ {
-				err := fate.Tempt()
-				if test.err {
-					if err != ErrTempt {
-						t.Fatalf("expected fate.ErrTempt: %v", err)
-					}
-				} else {
-					if err != nil {
-						t.Fatalf("unexpected error: %v", err)
-					}
+				err := test.fate.Tempt()
+				if err != test.err {
+					t.Fatalf("expected: %v\ngot: %v", test.err, err)
 				}
 			}
 		})
