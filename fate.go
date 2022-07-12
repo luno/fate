@@ -10,10 +10,8 @@ import (
 	"github.com/luno/jettison/j"
 )
 
-var (
-	// ErrTempt is the error returned when tempting fate and losing.
-	ErrTempt = errors.New("tempt fate error", j.C("ERR_9f3adc780288ce11"))
-)
+// ErrTempt is the error returned when tempting fate and losing.
+var ErrTempt = errors.New("tempt fate error", j.C("ERR_9f3adc780288ce11"))
 
 // Fate is an interface that wraps the tempt method.
 //
