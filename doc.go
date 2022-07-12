@@ -2,8 +2,8 @@
 // errors inside application logic by "tempting fate".
 //
 //   type Fate interface {
-//      // Tempt sometimes returns ErrTempt.
-//      Tempt() error
+//     // Tempt sometimes returns ErrTempt.
+//     Tempt() error
 //   }
 //
 // Fate supports deterministic behavior for tests and probabilistic behavior
