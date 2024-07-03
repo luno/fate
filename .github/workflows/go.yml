@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "**" ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
 
@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        go: ['1', '1.12', '1.13']
+        go: ['1', '1.21', '1.22']
 
     steps:
 
