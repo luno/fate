@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        go: ['1', '1.21', '1.22']
+        go: ['1.21', '1.22', '1']
 
     steps:
 
